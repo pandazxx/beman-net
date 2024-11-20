@@ -5,7 +5,7 @@ It is based on [P2762](http://wg21.link/p2762). Both the proposal
 and the implementation are in an early state although basic
 functionality is provided.
 
-`beman.net29` builds on top of [`beman.execution26`](https://github.com/beman-project/execution26). The
+`beman.net29` builds on top of [`beman.execution26`](https://github.com/bemanproject/execution26). The
 implementation should allow multiple ways how to support asynchronous
 operations although currently the only implemented approach is based
 on `poll(2)`. Implementations using `kqueue(2)`, `epoll(2)`,
@@ -16,7 +16,7 @@ possible use various libraries for asynchronous operations like
 ## Help Welcome!
 
 There are plenty of things which need to be done. Some of these
-are listed in the [issues section](https://github.com/beman-project/net29/issues).
+are listed in the [issues section](https://github.com/bemanproject/net29/issues).
 Other contributions are, of course, also welcome. Aside from contributing
 code the project welcomes reports on usage experience, code reviews, defect
 reports, features requests, etc. There are plenty contribution opportunities.
