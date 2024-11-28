@@ -16,7 +16,7 @@
 #    include<expected>
 #endif
 
-#include <iostream> //-dk:TODO remove
+#include <beman/execution26/detail/suppress_push.hpp>
 
 // ----------------------------------------------------------------------------
 
@@ -85,11 +85,6 @@ namespace demo::detail
     template <typename> struct make_type_list;
     template <template <typename> class L, typename... T>
     struct make_type_list<L<T...>>
-    {
-        using type = ex::detail::type_list<T...>;
-    };
-    template <typename... T>
-    struct make_type_list<ex::completion_signatures<T...>>
     {
         using type = ex::detail::type_list<T...>;
     };
@@ -447,5 +442,7 @@ inline auto demo::when_any_t::operator()(Sender&&...sender) const
 }
 
 // ----------------------------------------------------------------------------
+
+#include <beman/execution26/detail/suppress_pop.hpp>
 
 #endif
