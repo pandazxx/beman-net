@@ -16,7 +16,9 @@
 #    include<expected>
 #endif
 
-#include <beman/execution26/detail/suppress_push.hpp>
+#if 15 < __clang_major__
+#    include <beman/execution26/detail/suppress_push.hpp>
+#endif
 
 // ----------------------------------------------------------------------------
 

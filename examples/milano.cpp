@@ -35,9 +35,9 @@ auto timeout(auto scheduler, auto dur, ex::sender auto sender) {
     );
 }
 
-using on_exit = std::unique_ptr<char const, decltype([](auto msg){ std::cout << msg << "\n"; })>;
+using on_exit_msg = std::unique_ptr<char const, decltype([](auto msg){ std::cout << msg << "\n"; })>;
 demo::task<> run_client(auto client, auto s) {
-    on_exit exit("client exiting");
+    on_exit_msg exit("client exiting");
     char buffer[8194];
     std::ostringstream out;
     try {
