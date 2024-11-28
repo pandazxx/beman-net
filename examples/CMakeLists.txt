@@ -10,6 +10,7 @@ set(EXAMPLES
   client
   task
   cppcon-2024
+  milano
 )
 
 foreach(EXAMPLE ${EXAMPLES})
