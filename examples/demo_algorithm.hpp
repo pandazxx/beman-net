@@ -4,6 +4,18 @@
 #ifndef INCLUDED_EXAMPLES_DEMO_ALGORITHM
 #define INCLUDED_EXAMPLES_DEMO_ALGORITHM
 
+#if defined(__GNUC__)
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wmissing-braces"
+#    pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
+
+#if defined(__clang__)
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wunknown-warning-option"
+#    pragma clang diagnostic ignored "-Wmissing-braces"
+#endif
+
 #include <beman/net29/net.hpp>
 #include <atomic>
 #include <optional>
@@ -14,10 +26,6 @@
 #include <version>
 #if 202202L <= __cpp_lib_expected
 #    include<expected>
-#endif
-
-#if 15 < __clang_major__
-#    include <beman/execution26/detail/suppress_push.hpp>
 #endif
 
 // ----------------------------------------------------------------------------
@@ -444,7 +452,5 @@ inline auto demo::when_any_t::operator()(Sender&&...sender) const
 }
 
 // ----------------------------------------------------------------------------
-
-#include <beman/execution26/detail/suppress_pop.hpp>
 
 #endif
