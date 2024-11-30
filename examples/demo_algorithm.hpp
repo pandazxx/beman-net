@@ -4,6 +4,18 @@
 #ifndef INCLUDED_EXAMPLES_DEMO_ALGORITHM
 #define INCLUDED_EXAMPLES_DEMO_ALGORITHM
 
+#if defined(__GNUC__)
+#    pragma GCC diagnostic push
+#    pragma GCC diagnostic ignored "-Wmissing-braces"
+#    pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#endif
+
+#if defined(__clang__)
+#    pragma clang diagnostic push
+#    pragma clang diagnostic ignored "-Wunknown-warning-option"
+#    pragma clang diagnostic ignored "-Wmissing-braces"
+#endif
+
 #include <beman/net29/net.hpp>
 #include <atomic>
 #include <optional>
@@ -15,8 +27,6 @@
 #if 202202L <= __cpp_lib_expected
 #    include<expected>
 #endif
-
-#include <iostream> //-dk:TODO remove
 
 // ----------------------------------------------------------------------------
 
@@ -88,11 +98,13 @@ namespace demo::detail
     {
         using type = ex::detail::type_list<T...>;
     };
+#if __clang_major__ < 16
     template <typename... T>
     struct make_type_list<ex::completion_signatures<T...>>
     {
         using type = ex::detail::type_list<T...>;
     };
+#endif
     template <typename T>
     using make_type_list_t = typename make_type_list<T>::type;
 }
