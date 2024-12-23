@@ -98,13 +98,11 @@ namespace demo::detail
     {
         using type = ex::detail::type_list<T...>;
     };
-#if __clang_major__ < 16
     template <typename... T>
     struct make_type_list<ex::completion_signatures<T...>>
     {
         using type = ex::detail::type_list<T...>;
     };
-#endif
     template <typename T>
     using make_type_list_t = typename make_type_list<T>::type;
 }
