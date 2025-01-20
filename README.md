@@ -1,13 +1,13 @@
-# beman.net29: Senders For Network Operations
+# beman.net: Senders For Network Operations
 
 <img src="https://github.com/bemanproject/beman/blob/main/images/logos/beman_logo-beman_library_under_development.png" style="width:5%; height:auto;">
 
-`beman.net29` provides senders for asynchronous network operations.
+`beman.net` provides senders for asynchronous network operations.
 It is based on [P2762R2](https://wg21.link/P2762R2). Both the proposal
 and the implementation are in an early state although basic
 functionality is provided.
 
-`beman.net29` builds on top of [`beman.execution26`](https://github.com/bemanproject/execution26). The
+`beman.net` builds on top of [`beman.execution26`](https://github.com/bemanproject/execution26). The
 implementation should allow multiple ways how to support asynchronous
 operations although currently the only implemented approach is based
 on `poll(2)`. Implementations using `kqueue(2)`, `epoll(2)`,
@@ -22,7 +22,7 @@ possible use various libraries for asynchronous operations like
 ## Help Welcome!
 
 There are plenty of things which need to be done. Some of these
-are listed in the [issues section](https://github.com/bemanproject/net29/issues).
+are listed in the [issues section](https://github.com/bemanproject/net/issues).
 Other contributions are, of course, also welcome. Aside from contributing
 code the project welcomes reports on usage experience, code reviews, defect
 reports, features requests, etc. There are plenty contribution opportunities.
@@ -45,7 +45,7 @@ use something akin to the current interface.
 ## Building
 
 Currently, the interfaces are entirely implemented in headers, i.e.,
-there isn't a library needed. However, using the library `libbeman_net29`
+there isn't a library needed. However, using the library `libbeman_net`
 should make the relevant paths to headers available.  The following
 instructions build the library and the examples (required libraries are
 obtained and build using these instructions):

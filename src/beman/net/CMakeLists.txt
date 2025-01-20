@@ -1,5 +1,5 @@
 # cmake-format: off
-# src/beman/net29/CMakeLists.txt -*-makefile-*-
+# src/beman/net/CMakeLists.txt -*-makefile-*-
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 # cmake-format: on
 
@@ -8,7 +8,7 @@ add_library(${TARGET_ALIAS} ALIAS ${TARGET_LIBRARY})
 
 target_sources(${TARGET_LIBRARY}
     PRIVATE
-    net29.cpp
+    net.cpp
     PUBLIC
     FILE_SET ${TARGET_LIBRARY}_public_headers TYPE HEADERS
     BASE_DIRS ${PROJECT_SOURCE_DIR}/include

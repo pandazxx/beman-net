@@ -1,7 +1,7 @@
 // examples/http-server.cpp                                           -*-C++-*-
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#include <beman/net29/net.hpp>
+#include <beman/net/net.hpp>
 #include <beman/execution26/execution.hpp>
 #include "demo_algorithm.hpp"
 #include "demo_error.hpp"
@@ -15,7 +15,7 @@
 #include <unordered_map>
 
 namespace ex  = beman::execution26;
-namespace net = beman::net29;
+namespace net = beman::net;
 using namespace std::chrono_literals;
 
 // ----------------------------------------------------------------------------

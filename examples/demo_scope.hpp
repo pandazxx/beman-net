@@ -4,7 +4,7 @@
 #ifndef INCLUDED_EXAMPLES_DEMO_SCOPE
 #define INCLUDED_EXAMPLES_DEMO_SCOPE
 
-#include <beman/net29/net.hpp>
+#include <beman/net/net.hpp>
 #include <atomic>
 #include <iostream>
 #include <utility>
@@ -13,7 +13,7 @@
 
 namespace demo
 {
-    namespace ex = ::beman::net29::detail::ex;
+    namespace ex = ::beman::net::detail::ex;
 
     class scope
     {

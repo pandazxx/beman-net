@@ -4,8 +4,8 @@
 # cmake-format: on
 
 cmake_minimum_required(VERSION 3.23)
-project(beman_net29 VERSION 0.0.0 LANGUAGES CXX)
-set(TARGET_NAME net29)
+project(beman_net VERSION 0.0.0 LANGUAGES CXX)
+set(TARGET_NAME net)
 set(TARGET_PREFIX beman.${TARGET_NAME})
 set(TARGET_LIBRARY beman_${TARGET_NAME})
 set(TARGET_ALIAS beman::${TARGET_NAME})
@@ -24,11 +24,11 @@ FetchContent_MakeAvailable(execution26)
 
 include(CTest)
 if(BUILD_TESTING)
-  add_subdirectory(src/beman/${TARGET_NAME}/tests)
+  add_subdirectory(tests/beman/${TARGET_NAME})
   enable_testing()
 endif()
 
-add_subdirectory(src/beman/net29)
+add_subdirectory(src/beman/net)
 add_subdirectory(examples)
 
 include(GNUInstallDirs)

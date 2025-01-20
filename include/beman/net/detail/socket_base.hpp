@@ -1,17 +1,17 @@
-// include/beman/net29/detail/socket_base.hpp                         -*-C++-*-
+// include/beman/net/detail/socket_base.hpp                         -*-C++-*-
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#ifndef INCLUDED_BEMAN_NET29_DETAIL_SOCKET_BASE
-#define INCLUDED_BEMAN_NET29_DETAIL_SOCKET_BASE
+#ifndef INCLUDED_BEMAN_NET_DETAIL_SOCKET_BASE
+#define INCLUDED_BEMAN_NET_DETAIL_SOCKET_BASE
 
 // ----------------------------------------------------------------------------
 
-#include <beman/net29/detail/netfwd.hpp>
+#include <beman/net/detail/netfwd.hpp>
 #include <sys/socket.h>
 
 // ----------------------------------------------------------------------------
 
-class beman::net29::socket_base
+class beman::net::socket_base
 {
 public:
     template <typename Value, int Level, int Name>
