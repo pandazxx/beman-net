@@ -5,12 +5,12 @@
 #include <functional>
 #include <string_view>
 #include <beman/execution26/execution.hpp>
-#include <beman/net29/net.hpp>
+#include <beman/net/net.hpp>
 #include "demo_scope.hpp"
 #include "demo_task.hpp"
 
 namespace ex  = ::beman::execution26;
-namespace net = ::beman::net29;
+namespace net = ::beman::net;
 
 namespace
 {

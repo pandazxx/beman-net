@@ -1,14 +1,14 @@
-// include/beman/net29/detail/execution.hpp                           -*-C++-*-
+// include/beman/net/detail/execution.hpp                           -*-C++-*-
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#ifndef INCLUDED_INCLUDE_BEMAN_NET29_DETAIL_EXECUTION
-#define INCLUDED_INCLUDE_BEMAN_NET29_DETAIL_EXECUTION
+#ifndef INCLUDED_INCLUDE_BEMAN_NET_DETAIL_EXECUTION
+#define INCLUDED_INCLUDE_BEMAN_NET_DETAIL_EXECUTION
 
 #include <beman/execution26/execution.hpp>
 
 // ----------------------------------------------------------------------------
 
-namespace beman::net29::detail::ex::detail
+namespace beman::net::detail::ex::detail
 {
     using ::beman::execution26::detail::type_list;
     using ::beman::execution26::detail::variant_or_empty;
@@ -20,7 +20,7 @@ namespace beman::net29::detail::ex::detail
     using ::beman::execution26::detail::forward_like;
 }
 
-namespace beman::net29::detail::ex
+namespace beman::net::detail::ex
 {
     using ::beman::execution26::completion_signatures;
     using ::beman::execution26::detail::decayed_tuple;

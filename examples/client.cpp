@@ -1,7 +1,7 @@
 // examples/client.cpp                                                -*-C++-*-
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#include <beman/net29/net.hpp>
+#include <beman/net/net.hpp>
 #include <functional>
 #include <iostream>
 #include <memory>
@@ -9,7 +9,7 @@
 #include "demo_scope.hpp"
 
 namespace ex  = ::beman::execution26;
-namespace net = ::beman::net29;
+namespace net = ::beman::net;
 
 // ----------------------------------------------------------------------------
 

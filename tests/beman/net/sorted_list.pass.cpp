@@ -1,7 +1,7 @@
-// src/beman/net29/tests/sorted_list.pass.cpp                         -*-C++-*-
+// src/beman/net/tests/sorted_list.pass.cpp                           -*-C++-*-
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#include <beman/net29/detail/sorted_list.hpp>
+#include <beman/net/detail/sorted_list.hpp>
 #include <cassert>
 #include <iostream>
 
@@ -29,7 +29,7 @@ namespace
         std::cout << "test insert()\n";
         node d{};
         node n[] = { {3, &d}, {2, &d}, {5, &d}, {4, &d} };
-        beman::net29::detail::sorted_list<node> l;
+        beman::net::detail::sorted_list<node> l;
         assert(l.empty());
         print(l.front());
 
@@ -61,7 +61,7 @@ namespace
     auto test_pop_front() -> void
     {
         node n[] = { {3}, {2}, {5}, {4} };
-        beman::net29::detail::sorted_list<node> l;
+        beman::net::detail::sorted_list<node> l;
         for (node& c: n)
             l.insert(&c);
         
@@ -89,7 +89,7 @@ namespace
     auto test_pop_front_or() -> void
     {
         node n[] = { {3}, {2}, {5}, {4} };
-        beman::net29::detail::sorted_list<node> l;
+        beman::net::detail::sorted_list<node> l;
         for (node& c: n)
             l.insert(&c);
         
@@ -105,7 +105,7 @@ namespace
     {
         std::cout << "test erase()\n";
         node n[] = { {2}, {1}, {5}, {4}, {3} };
-        beman::net29::detail::sorted_list<node> l;
+        beman::net::detail::sorted_list<node> l;
         for (node& c: n)
             l.insert(&c);
         print(l.front());

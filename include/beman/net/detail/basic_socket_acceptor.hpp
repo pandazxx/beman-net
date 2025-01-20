@@ -1,16 +1,16 @@
-// include/beman/net29/detail/basic_socket_acceptor.hpp               -*-C++-*-
+// include/beman/net/detail/basic_socket_acceptor.hpp               -*-C++-*-
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#ifndef INCLUDED_BEMAN_NET29_DETAIL_BASIC_SOCKET_ACCEPTOR
-#define INCLUDED_BEMAN_NET29_DETAIL_BASIC_SOCKET_ACCEPTOR
+#ifndef INCLUDED_BEMAN_NET_DETAIL_BASIC_SOCKET_ACCEPTOR
+#define INCLUDED_BEMAN_NET_DETAIL_BASIC_SOCKET_ACCEPTOR
 
-#include <beman/net29/detail/io_context.hpp>
-#include <beman/net29/detail/socket_category.hpp>
+#include <beman/net/detail/io_context.hpp>
+#include <beman/net/detail/socket_category.hpp>
 #include <system_error>
 
 // ----------------------------------------------------------------------------
 
-namespace beman::net29
+namespace beman::net
 {
     template <typename>
     class basic_socket_acceptor;
@@ -19,21 +19,21 @@ namespace beman::net29
 // ----------------------------------------------------------------------------
 
 template <typename AcceptableProtocol>
-class beman::net29::basic_socket_acceptor
-    : public ::beman::net29::socket_base
+class beman::net::basic_socket_acceptor
+    : public ::beman::net::socket_base
 {
 public:
-    using scheduler_type     = ::beman::net29::io_context::scheduler_type;
-    using executor_type      = ::beman::net29::io_context::executor_type;
-    using native_handle_type = ::beman::net29::detail::native_handle_type;
+    using scheduler_type     = ::beman::net::io_context::scheduler_type;
+    using executor_type      = ::beman::net::io_context::executor_type;
+    using native_handle_type = ::beman::net::detail::native_handle_type;
     using protocol_type      = AcceptableProtocol;
     using endpoint_type      = typename protocol_type::endpoint;
     using socket_type        = typename protocol_type::socket;
 
 private:
-    ::beman::net29::io_context&       d_context;
+    ::beman::net::io_context&       d_context;
     protocol_type                     d_protocol; 
-    ::beman::net29::detail::socket_id d_id{};
+    ::beman::net::detail::socket_id d_id{};
 
 private:
     template <typename Fun_t>
@@ -48,32 +48,32 @@ private:
     }
 
 public:
-    //explicit basic_socket_acceptor(::beman::net29::io_context&);
-    basic_socket_acceptor(::beman::net29::io_context&, protocol_type const& protocol);
-    basic_socket_acceptor(::beman::net29::io_context& context, endpoint_type const& endpoint, bool reuse = true)
-        : ::beman::net29::socket_base()
+    //explicit basic_socket_acceptor(::beman::net::io_context&);
+    basic_socket_acceptor(::beman::net::io_context&, protocol_type const& protocol);
+    basic_socket_acceptor(::beman::net::io_context& context, endpoint_type const& endpoint, bool reuse = true)
+        : ::beman::net::socket_base()
         , d_context(context)
         , d_protocol(endpoint.protocol())
-        , d_id(::beman::net29::detail::socket_id::invalid)
+        , d_id(::beman::net::detail::socket_id::invalid)
     {
         this->open(endpoint.protocol());
         if (reuse)
         {
-            this->set_option(::beman::net29::socket_base::reuse_address(true));
+            this->set_option(::beman::net::socket_base::reuse_address(true));
         }
         this->bind(endpoint);
         this->listen();
     }
-    basic_socket_acceptor(::beman::net29::io_context&, protocol_type const&, native_handle_type const&);
+    basic_socket_acceptor(::beman::net::io_context&, protocol_type const&, native_handle_type const&);
     basic_socket_acceptor(basic_socket_acceptor const&) = delete;
     basic_socket_acceptor(basic_socket_acceptor&& other)
-        : ::beman::net29::socket_base()
+        : ::beman::net::socket_base()
         , d_protocol(other.d_protocol)
-        , d_id(::std::exchange(other.d_id, ::beman::net29::detail::socket_id::invalid))
+        , d_id(::std::exchange(other.d_id, ::beman::net::detail::socket_id::invalid))
     {
     }
     template<typename OtherProtocol>
-    basic_socket_acceptor(::beman::net29::basic_socket_acceptor<OtherProtocol>&&);
+    basic_socket_acceptor(::beman::net::basic_socket_acceptor<OtherProtocol>&&);
     ~basic_socket_acceptor()
     {
         //-dk:TODO assert that there is no outstanding work?
@@ -83,9 +83,9 @@ public:
     basic_socket_acceptor& operator=(basic_socket_acceptor const&) = delete;
     basic_socket_acceptor& operator=(basic_socket_acceptor&&);
     template<typename OtherProtocol>
-    basic_socket_acceptor& operator=(::beman::net29::basic_socket_acceptor<OtherProtocol>&&);
+    basic_socket_acceptor& operator=(::beman::net::basic_socket_acceptor<OtherProtocol>&&);
 
-    auto get_context() -> ::beman::net29::io_context& { return this->d_context; }
+    auto get_context() -> ::beman::net::io_context& { return this->d_context; }
     auto get_scheduler() noexcept -> scheduler_type
     {
         return this->d_context.get_scheduler();
@@ -93,7 +93,7 @@ public:
     executor_type      get_executor() noexcept;
     auto native_handle() -> native_handle_type { return this->d_context.native_handle(this->d_id); }
     auto _native_handle() const -> native_handle_type { return this->d_context.native_handle(this->d_id); }
-    auto id() const -> ::beman::net29::detail::socket_id { return this->d_id; }
+    auto id() const -> ::beman::net::detail::socket_id { return this->d_id; }
     auto open(protocol_type const& p = protocol_type()) -> void
     {
         dispatch([this, &p](::std::error_code& error){ this->open(p, error); });
@@ -102,7 +102,7 @@ public:
     {
         if (this->is_open())
         {
-            error = ::std::error_code(int(socket_errc::already_open), ::beman::net29::socket_category());
+            error = ::std::error_code(int(socket_errc::already_open), ::beman::net::socket_category());
         }
         this->d_id = this->d_context.make_socket(p.family(), p.type(), p.protocol(), error);
     }
@@ -110,7 +110,7 @@ public:
     void assign(protocol_type const&, native_handle_type const&, ::std::error_code&);
     native_handle_type release();
     native_handle_type release(::std::error_code&);
-    auto is_open() const noexcept -> bool { return this->d_id != ::beman::net29::detail::socket_id::invalid; }
+    auto is_open() const noexcept -> bool { return this->d_id != ::beman::net::detail::socket_id::invalid; }
     auto close() -> void
     {
         dispatch([this](auto& error){ return this->close(error); });
@@ -121,7 +121,7 @@ public:
         if (this->is_open())
         {
             this->d_context.release(this->id(), error);
-            this->d_id = ::beman::net29::detail::socket_id::invalid;
+            this->d_id = ::beman::net::detail::socket_id::invalid;
         }
     }
     void cancel();
@@ -165,7 +165,7 @@ public:
     {
         this->d_context.bind(this->d_id, endpoint, error);
     }
-    auto listen(int no = ::beman::net29::socket_base::max_listen_connections) -> void
+    auto listen(int no = ::beman::net::socket_base::max_listen_connections) -> void
     {
         dispatch([this, no](auto& error){ this->listen(no, error); });
     }
@@ -183,10 +183,10 @@ public:
     socket_type accept(io_context&, ::std::error_code&);
     socket_type accept(endpoint_type&);
     socket_type accept(endpoint_type&, ::std::error_code&);
-    socket_type accept(::beman::net29::io_context&, endpoint_type&);
-    socket_type accept(::beman::net29::io_context&, endpoint_type&, ::std::error_code&);
-    void wait(::beman::net29::socket_base::wait_type);
-    void wait(::beman::net29::socket_base::wait_type, ::std::error_code&);
+    socket_type accept(::beman::net::io_context&, endpoint_type&);
+    socket_type accept(::beman::net::io_context&, endpoint_type&, ::std::error_code&);
+    void wait(::beman::net::socket_base::wait_type);
+    void wait(::beman::net::socket_base::wait_type, ::std::error_code&);
 };
 
 // ----------------------------------------------------------------------------

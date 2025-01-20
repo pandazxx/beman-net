@@ -1,15 +1,15 @@
-// include/beman/net29/detail/netfwd.hpp                              -*-C++-*-
+// include/beman/net/detail/netfwd.hpp                              -*-C++-*-
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#ifndef INCLUDED_BEMAN_NET29_DETAIL_NETFWD
-#define INCLUDED_BEMAN_NET29_DETAIL_NETFWD
+#ifndef INCLUDED_BEMAN_NET_DETAIL_NETFWD
+#define INCLUDED_BEMAN_NET_DETAIL_NETFWD
 
 #include <limits>
 #include <cstdint>
 
 // ----------------------------------------------------------------------------
 
-namespace beman::net29::detail
+namespace beman::net::detail
 {
     enum socket_id: ::std::uint_least32_t
     {
@@ -20,7 +20,7 @@ namespace beman::net29::detail
     inline constexpr native_handle_type invalid_handle{-1};
 }
 
-namespace beman::net29
+namespace beman::net
 {
     class io_context;
     class socket_base;

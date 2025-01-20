@@ -16,7 +16,7 @@
 #    pragma clang diagnostic ignored "-Wmissing-braces"
 #endif
 
-#include <beman/net29/net.hpp>
+#include <beman/net/net.hpp>
 #include <atomic>
 #include <optional>
 #include <tuple>
@@ -32,7 +32,7 @@
 
 namespace demo
 {
-    namespace ex = ::beman::net29::detail::ex;
+    namespace ex = ::beman::net::detail::ex;
 }
 
 namespace demo::detail
@@ -225,9 +225,9 @@ inline auto demo::into_error_t::operator()(Fun&& fun) const
 #if 202202L <= __cpp_lib_expected
 inline auto demo::into_expected_t::operator()() const
 {
-    return beman::net29::detail::ex::detail::sender_adaptor{*this};
+    return beman::net::detail::ex::detail::sender_adaptor{*this};
 }
-template <beman::net29::detail::ex::sender Sender>
+template <beman::net::detail::ex::sender Sender>
 inline auto demo::into_expected_t::operator()(Sender&& s) const
 {
     using value_type = ex::value_types_of_t<
@@ -238,12 +238,12 @@ inline auto demo::into_expected_t::operator()(Sender&& s) const
         >;
     using error_type = ex::error_types_of_t<Sender>;
     return ::std::forward<Sender>(s)
-        | beman::net29::detail::ex::then([]<typename... A>(A&&... a)noexcept{
+        | beman::net::detail::ex::then([]<typename... A>(A&&... a)noexcept{
             return std::expected<value_type, error_type>(
                 ::std::in_place_t{}, ::std::forward<A>(a)...
             );
         })
-        | beman::net29::detail::ex::upon_error([]<typename E>(E&& e)noexcept{
+        | beman::net::detail::ex::upon_error([]<typename E>(E&& e)noexcept{
             return std::expected<value_type, error_type>(
                 ::std::unexpect_t{}, ::std::forward<E>(e)
             );
@@ -397,7 +397,7 @@ struct demo::when_any_t::state<::std::index_sequence<I...>, Receiver, Value, Err
     state(R&& receiver, P&& s)
         : state_value<Receiver, value_type, error_type>(sizeof...(Sender), ::std::forward<R>(receiver))
         , states{demo::ex::connect(
-            ::beman::net29::detail::ex::detail::forward_like<P>(s.template get<I>()),
+            ::beman::net::detail::ex::detail::forward_like<P>(s.template get<I>()),
             receiver_type<I>{this}
         )...}
     {

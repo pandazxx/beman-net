@@ -1,8 +1,8 @@
-// include/beman/net29/detail/endpoint.hpp                            -*-C++-*-
+// include/beman/net/detail/endpoint.hpp                            -*-C++-*-
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
-#ifndef INCLUDED_BEMAN_NET29_DETAIL_ENDPOINT
-#define INCLUDED_BEMAN_NET29_DETAIL_ENDPOINT
+#ifndef INCLUDED_BEMAN_NET_DETAIL_ENDPOINT
+#define INCLUDED_BEMAN_NET_DETAIL_ENDPOINT
 
 #include <algorithm>
 #include <cstring>
@@ -10,14 +10,14 @@
 
 // ----------------------------------------------------------------------------
 
-namespace beman::net29::detail
+namespace beman::net::detail
 {
     class endpoint;
 }
 
 // ----------------------------------------------------------------------------
 
-class beman::net29::detail::endpoint
+class beman::net::detail::endpoint
 {
 private:
     ::sockaddr_storage d_data{};

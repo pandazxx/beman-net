@@ -4,7 +4,7 @@
 #ifndef INCLUDED_EXAMPLES_DEMO_TASK
 #define INCLUDED_EXAMPLES_DEMO_TASK
 
-#include <beman/net29/net.hpp>
+#include <beman/net/net.hpp>
 #include <exception>
 #include <coroutine>
 #include <memory>
@@ -20,7 +20,7 @@
 
 namespace demo
 {
-    namespace ex = ::beman::net29::detail::ex;
+    namespace ex = ::beman::net::detail::ex;
 
     template <typename T>
     struct task_state_base
@@ -33,7 +33,7 @@ namespace demo
         template <typename Receiver>
         auto complete_set_value(Receiver& receiver)
         {
-            ::beman::net29::detail::ex::set_value(
+            ::beman::net::detail::ex::set_value(
                 ::std::move(receiver), ::std::move(*this->task_result)
             );
         }
@@ -48,7 +48,7 @@ namespace demo
         template <typename Receiver>
         auto complete_set_value(Receiver& receiver)
         {
-            ::beman::net29::detail::ex::set_value(::std::move(receiver));
+            ::beman::net::detail::ex::set_value(::std::move(receiver));
         }
     };
 
@@ -85,9 +85,9 @@ namespace demo
     };
 
     template <typename T>
-    struct task_completion { using type = ::beman::net29::detail::ex::set_value_t(T); };
+    struct task_completion { using type = ::beman::net::detail::ex::set_value_t(T); };
     template <>
-    struct task_completion<void> { using type = ::beman::net29::detail::ex::set_value_t(); };
+    struct task_completion<void> { using type = ::beman::net::detail::ex::set_value_t(); };
 
     template <typename Result = void>
     struct task
@@ -245,23 +245,23 @@ namespace demo
             }
             auto complete_error(::std::exception_ptr error) -> void override
             {
-                ::beman::net29::detail::ex::set_error(
+                ::beman::net::detail::ex::set_error(
                     ::std::move(this->receiver),
                     ::std::move(error)
                 );
             }
             auto complete_stopped() -> void override
             {
-                ::beman::net29::detail::ex::set_stopped(::std::move(this->receiver));
+                ::beman::net::detail::ex::set_stopped(::std::move(this->receiver));
             }
         };
 
         unique_handle handle;
 
-        using sender_concept = ::beman::net29::detail::ex::sender_t;
-        using completion_signatures = ::beman::net29::detail::ex::completion_signatures<
-            ::beman::net29::detail::ex::set_error_t(::std::exception_ptr),
-            ::beman::net29::detail::ex::set_stopped_t(),
+        using sender_concept = ::beman::net::detail::ex::sender_t;
+        using completion_signatures = ::beman::net::detail::ex::completion_signatures<
+            ::beman::net::detail::ex::set_error_t(::std::exception_ptr),
+            ::beman::net::detail::ex::set_stopped_t(),
             typename task_completion<::std::decay_t<Result>>::type
         >;
 

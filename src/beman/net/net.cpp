@@ -1,8 +1,9 @@
-// src/beman/net29/tests/dummy.pass.cpp                               -*-C++-*-
+// src/beman/net/net.cpp                                              -*-C++-*-
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 // ----------------------------------------------------------------------------
 
-auto main() -> int
+namespace beman::net
 {
+    int version{000};
 }
