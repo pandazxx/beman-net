@@ -9,18 +9,18 @@ set(TARGET_NAME net)
 set(TARGET_PREFIX beman.${TARGET_NAME})
 set(TARGET_LIBRARY beman_${TARGET_NAME})
 set(TARGET_ALIAS beman::${TARGET_NAME})
-set(TARGETS_EXPORT_NAME ${CMAKE_PROJECT_NAME}Targets)
+set(TARGETS_EXPORT_NAME ${CMAKE_PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 23)
 
 include(FetchContent)
 FetchContent_Declare(
-    execution26
-    # for local development, use SOURCE_DIR <path-to>/execution26
-    GIT_REPOSITORY https://github.com/bemanproject/execution26
-    GIT_TAG 752882e
+    execution
+    # for local development, use SOURCE_DIR <path-to>/execution
+    GIT_REPOSITORY https://github.com/bemanproject/execution
+    GIT_TAG e9c3032
 )
-FetchContent_MakeAvailable(execution26)
+FetchContent_MakeAvailable(execution)
 
 include(CTest)
 if(BUILD_TESTING)
@@ -28,7 +28,7 @@ if(BUILD_TESTING)
   enable_testing()
 endif()
 
-add_subdirectory(src/beman/net)
+add_subdirectory(src/beman/${TARGET_NAME})
 add_subdirectory(examples)
 
 include(GNUInstallDirs)

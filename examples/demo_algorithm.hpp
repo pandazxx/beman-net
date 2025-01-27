@@ -184,7 +184,7 @@ struct demo::into_error_t::sender
     using sender_concept = ex::sender_t;
     template <typename Env>
     auto get_completion_signatures(Env const& env) const {
-        return ::beman::execution26::detail::meta::transform<
+        return ::beman::execution::detail::meta::transform<
             demo::detail::into_error_transform<Fun>::template type,
             decltype(ex::get_completion_signatures(::std::declval<Sender>(),
                                                    env))
@@ -269,6 +269,7 @@ struct demo::when_any_t::state_base
         , receiver(::std::forward<R>(receiver))
     {
     }
+    virtual ~state_base() = default;
     auto complete() -> bool
     {
         if (0u == this->done_count++)
@@ -386,7 +387,7 @@ struct demo::when_any_t::state<::std::index_sequence<I...>, Receiver, Value, Err
     template <::std::size_t J>
     using receiver_type = when_any_t::receiver<J, Receiver, value_type, error_type>;
     using operation_state_concept = ex::operation_state_t;
-    using states_type = ::beman::execution26::detail::product_type<
+    using states_type = ::beman::execution::detail::product_type<
         decltype(
             demo::ex::connect(::std::declval<Sender>(),
                               ::std::declval<receiver_type<I>>())
@@ -414,11 +415,11 @@ struct demo::when_any_t::state<::std::index_sequence<I...>, Receiver, Value, Err
 template <demo::ex::sender... Sender>
 struct demo::when_any_t::sender
 {
-    ::beman::execution26::detail::product_type<::std::remove_cvref_t<Sender>...> sender;
+    ::beman::execution::detail::product_type<::std::remove_cvref_t<Sender>...> sender;
     using sender_concept = ex::sender_t;
     using completion_signatures =
-        ::beman::execution26::detail::meta::unique<
-            ::beman::execution26::detail::meta::combine<
+        ::beman::execution::detail::meta::unique<
+            ::beman::execution::detail::meta::combine<
                 decltype(ex::get_completion_signatures(::std::declval<Sender&&>(),
                                                        ex::empty_env{}))...
             >
