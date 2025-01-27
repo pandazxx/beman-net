@@ -139,7 +139,7 @@ struct beman::net::detail::poll_context final
     }
     auto to_milliseconds(auto duration) -> int
     {
-        return int(::std::chrono::duration_cast<::std::chrono::milliseconds>(duration).count());
+        return ::std::chrono::duration_cast<::std::chrono::milliseconds>(duration).count();
     }
     auto run_one() -> ::std::size_t override final
     {
@@ -158,7 +158,7 @@ struct beman::net::detail::poll_context final
         {
             auto next_time{this->d_timeouts.value_or(now)};
             int timeout{now == next_time? -1: this->to_milliseconds(next_time - now)};
-            int rc(::poll(this->d_poll.data(), nfds_t(this->d_poll.size()), timeout));
+            int rc(::poll(this->d_poll.data(), this->d_poll.size(), timeout));
             if (rc < 0)
             {
                 switch (errno)
@@ -215,7 +215,7 @@ struct beman::net::detail::poll_context final
         auto it(::std::find(this->d_outstanding.begin(), this->d_outstanding.end(), op));
         if (it != this->d_outstanding.end())
         {
-            this->remove_outstanding(std::size_t(::std::distance(this->d_outstanding.begin(), it)));
+            this->remove_outstanding(::std::distance(this->d_outstanding.begin(), it));
             op->cancel();
             cancel_op->cancel();
         }
@@ -337,7 +337,7 @@ struct beman::net::detail::poll_context final
                                   ::std::get<1>(completion))};
                 if (0 <= rc)
                 {
-                    ::std::get<2>(completion) = ::std::size_t(rc);
+                    ::std::get<2>(completion) = rc;
                     completion.complete();
                     return ::beman::net::detail::submit_result::ready;
                 }
@@ -376,7 +376,7 @@ struct beman::net::detail::poll_context final
                                     ::std::get<1>(completion))};
                 if (0 <= rc)
                 {
-                    ::std::get<2>(completion) = ::std::size_t(rc);
+                    ::std::get<2>(completion) = rc;
                     completion.complete();
                     return ::beman::net::detail::submit_result::ready;
                 }

@@ -8,7 +8,7 @@
 #include "demo_task.hpp"
 #include "demo_scope.hpp"
 
-namespace ex  = ::beman::execution;
+namespace ex  = ::beman::execution26;
 namespace net = ::beman::net;
 
 // ----------------------------------------------------------------------------

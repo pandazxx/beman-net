@@ -26,7 +26,6 @@ struct beman::net::detail::context_base
     struct task
     {
         task* next;
-        virtual ~task() = default;
         virtual auto complete() -> void = 0;
     };
 

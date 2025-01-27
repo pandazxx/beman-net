@@ -7,7 +7,7 @@ It is based on [P2762R2](https://wg21.link/P2762R2). Both the proposal
 and the implementation are in an early state although basic
 functionality is provided.
 
-`beman.net` builds on top of [`beman.execution`](https://github.com/bemanproject/execution). The
+`beman.net` builds on top of [`beman.execution26`](https://github.com/bemanproject/execution26). The
 implementation should allow multiple ways how to support asynchronous
 operations although currently the only implemented approach is based
 on `poll(2)`. Implementations using `kqueue(2)`, `epoll(2)`,

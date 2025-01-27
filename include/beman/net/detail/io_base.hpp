@@ -56,7 +56,6 @@ struct beman::net::detail::io_base
     extra_t                               extra{nullptr, +[](void*){}};
 
     io_base(::beman::net::detail::socket_id id, int event): id(id), event(event) {}
-    virtual ~io_base() = default;
 
     virtual auto complete() -> void = 0;
     virtual auto error(::std::error_code) -> void = 0;

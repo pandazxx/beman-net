@@ -26,7 +26,6 @@ namespace demo
     struct task_state_base
     {
         ::std::optional<T> task_result;
-        virtual ~task_state_base() = default;
         virtual auto complete_value() -> void = 0;
         virtual auto complete_error(::std::exception_ptr) -> void = 0;
         virtual auto complete_stopped() -> void = 0;
@@ -42,7 +41,6 @@ namespace demo
     template <>
     struct task_state_base<void>
     {
-        virtual ~task_state_base() = default;
         virtual auto complete_value() -> void = 0;
         virtual auto complete_error(::std::exception_ptr) -> void = 0;
         virtual auto complete_stopped() -> void = 0;
@@ -116,12 +114,12 @@ namespace demo
                     this->awaiter->handle.resume();
                 }
                 template <typename Error>
-                auto set_error(Error&& err) noexcept -> void
+                auto set_error(Error&& error) noexcept -> void
                 {
                     if constexpr (::std::same_as<::std::decay_t<Error>, ::std::exception_ptr>)
-                        this->awaiter->error = err;
+                        this->awaiter->error = error;
                     else
-                        this->awaiter->error = ::std::make_exception_ptr(::std::forward<Error>(err));
+                        this->awaiter->error = ::std::make_exception_ptr(::std::forward<Error>(error));
                     this->awaiter->handle.resume();
                 }
                 auto set_stopped() noexcept -> void
@@ -148,9 +146,9 @@ namespace demo
             auto stop() -> void;
             auto get_token() const noexcept -> ex::inplace_stop_token;
             constexpr auto await_ready() const noexcept -> bool { return false; }
-            auto await_suspend(::std::coroutine_handle<Promise> hndle) -> void
+            auto await_suspend(::std::coroutine_handle<Promise> handle) -> void
             {
-                this->handle = hndle;
+                this->handle = handle;
                 ex::start(this->state);
             }
             auto await_resume()

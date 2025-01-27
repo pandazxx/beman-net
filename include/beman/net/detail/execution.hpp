@@ -4,76 +4,76 @@
 #ifndef INCLUDED_INCLUDE_BEMAN_NET_DETAIL_EXECUTION
 #define INCLUDED_INCLUDE_BEMAN_NET_DETAIL_EXECUTION
 
-#include <beman/execution/execution.hpp>
+#include <beman/execution26/execution.hpp>
 
 // ----------------------------------------------------------------------------
 
 namespace beman::net::detail::ex::detail
 {
-    using ::beman::execution::detail::type_list;
-    using ::beman::execution::detail::variant_or_empty;
-    using ::beman::execution::detail::meta::combine;
-    using ::beman::execution::detail::meta::filter;
-    using ::beman::execution::detail::meta::unique;
-    using ::beman::execution::detail::meta::transform;
-    using ::beman::execution::detail::sender_adaptor;
-    using ::beman::execution::detail::forward_like;
+    using ::beman::execution26::detail::type_list;
+    using ::beman::execution26::detail::variant_or_empty;
+    using ::beman::execution26::detail::meta::combine;
+    using ::beman::execution26::detail::meta::filter;
+    using ::beman::execution26::detail::meta::unique;
+    using ::beman::execution26::detail::meta::transform;
+    using ::beman::execution26::detail::sender_adaptor;
+    using ::beman::execution26::detail::forward_like;
 }
 
 namespace beman::net::detail::ex
 {
-    using ::beman::execution::completion_signatures;
-    using ::beman::execution::detail::decayed_tuple;
+    using ::beman::execution26::completion_signatures;
+    using ::beman::execution26::detail::decayed_tuple;
 
-    using ::beman::execution::get_env;
-    using ::beman::execution::empty_env;
-    using ::beman::execution::env_of_t;
-    using ::beman::execution::value_types_of_t;
-    using ::beman::execution::error_types_of_t;
+    using ::beman::execution26::get_env;
+    using ::beman::execution26::empty_env;
+    using ::beman::execution26::env_of_t;
+    using ::beman::execution26::value_types_of_t;
+    using ::beman::execution26::error_types_of_t;
 
-    using ::beman::execution::get_stop_token_t;
-    using ::beman::execution::get_stop_token;
-    using ::beman::execution::get_completion_signatures_t;
-    using ::beman::execution::get_completion_signatures;
-    using ::beman::execution::get_completion_scheduler_t;
-    using ::beman::execution::get_completion_scheduler;
-    using ::beman::execution::get_delegation_scheduler_t;
-    using ::beman::execution::get_delegation_scheduler;
-    using ::beman::execution::get_scheduler_t;
-    using ::beman::execution::get_scheduler;
+    using ::beman::execution26::get_stop_token_t;
+    using ::beman::execution26::get_stop_token;
+    using ::beman::execution26::get_completion_signatures_t;
+    using ::beman::execution26::get_completion_signatures;
+    using ::beman::execution26::get_completion_scheduler_t;
+    using ::beman::execution26::get_completion_scheduler;
+    using ::beman::execution26::get_delegation_scheduler_t;
+    using ::beman::execution26::get_delegation_scheduler;
+    using ::beman::execution26::get_scheduler_t;
+    using ::beman::execution26::get_scheduler;
 
-    using ::beman::execution::operation_state_t;
-    using ::beman::execution::operation_state;
-    using ::beman::execution::receiver_t;
-    using ::beman::execution::receiver;
-    using ::beman::execution::sender_t;
-    using ::beman::execution::sender;
-    using ::beman::execution::scheduler_t;
-    using ::beman::execution::scheduler;
+    using ::beman::execution26::operation_state_t;
+    using ::beman::execution26::operation_state;
+    using ::beman::execution26::receiver_t;
+    using ::beman::execution26::receiver;
+    using ::beman::execution26::sender_t;
+    using ::beman::execution26::sender;
+    using ::beman::execution26::scheduler_t;
+    using ::beman::execution26::scheduler;
 
-    using ::beman::execution::sender_in;
+    using ::beman::execution26::sender_in;
 
-    using ::beman::execution::set_error_t;
-    using ::beman::execution::set_error;
-    using ::beman::execution::set_stopped_t;
-    using ::beman::execution::set_stopped;
-    using ::beman::execution::set_value_t;
-    using ::beman::execution::set_value;
+    using ::beman::execution26::set_error_t;
+    using ::beman::execution26::set_error;
+    using ::beman::execution26::set_stopped_t;
+    using ::beman::execution26::set_stopped;
+    using ::beman::execution26::set_value_t;
+    using ::beman::execution26::set_value;
 
-    using ::beman::execution::connect_t;
-    using ::beman::execution::connect;
-    using ::beman::execution::start_t;
-    using ::beman::execution::start;
+    using ::beman::execution26::connect_t;
+    using ::beman::execution26::connect;
+    using ::beman::execution26::start_t;
+    using ::beman::execution26::start;
 
-    using ::beman::execution::read_env;
-    using ::beman::execution::detail::write_env;
-    using ::beman::execution::just;
-    using ::beman::execution::just_error;
-    using ::beman::execution::just_stopped;
-    using ::beman::execution::then;
-    using ::beman::execution::upon_error;
-    using ::beman::execution::upon_stopped;
-    using ::beman::execution::sync_wait;
+    using ::beman::execution26::read_env;
+    using ::beman::execution26::detail::write_env;
+    using ::beman::execution26::just;
+    using ::beman::execution26::just_error;
+    using ::beman::execution26::just_stopped;
+    using ::beman::execution26::then;
+    using ::beman::execution26::upon_error;
+    using ::beman::execution26::upon_stopped;
+    using ::beman::execution26::sync_wait;
 }
 
 // ----------------------------------------------------------------------------
