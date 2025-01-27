@@ -26,7 +26,7 @@ namespace demo
     struct task_state_base
     {
         ::std::optional<T> task_result;
-        virtual ~task_state_base() = default;
+        virtual ~task_state_base()                                = default;
         virtual auto complete_value() -> void = 0;
         virtual auto complete_error(::std::exception_ptr) -> void = 0;
         virtual auto complete_stopped() -> void = 0;
@@ -42,7 +42,7 @@ namespace demo
     template <>
     struct task_state_base<void>
     {
-        virtual ~task_state_base() = default;
+        virtual ~task_state_base()                                = default;
         virtual auto complete_value() -> void = 0;
         virtual auto complete_error(::std::exception_ptr) -> void = 0;
         virtual auto complete_stopped() -> void = 0;
@@ -116,8 +116,7 @@ namespace demo
                     this->awaiter->handle.resume();
                 }
                 template <typename Error>
-                auto set_error(Error&& err) noexcept -> void
-                {
+                auto set_error(Error&& err) noexcept -> void {
                     if constexpr (::std::same_as<::std::decay_t<Error>, ::std::exception_ptr>)
                         this->awaiter->error = err;
                     else
@@ -148,8 +147,7 @@ namespace demo
             auto stop() -> void;
             auto get_token() const noexcept -> ex::inplace_stop_token;
             constexpr auto await_ready() const noexcept -> bool { return false; }
-            auto await_suspend(::std::coroutine_handle<Promise> hndle) -> void
-            {
+            auto           await_suspend(::std::coroutine_handle<Promise> hndle) -> void {
                 this->handle = hndle;
                 ex::start(this->state);
             }
@@ -228,11 +226,7 @@ namespace demo
             ::std::optional<stop_callback> callback;
 
             template <typename R>
-            state(unique_handle handle, R&& receiver)
-                : handle(::std::move(handle))
-                , receiver(::std::forward<R>(receiver))
-            {
-            }
+            state(unique_handle hndl, R&& rcvr) : handle(::std::move(hndl)), receiver(::std::forward<R>(rcvr)) {}
 
             auto start() & noexcept -> void
             {

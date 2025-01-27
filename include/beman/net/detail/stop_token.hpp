@@ -10,11 +10,11 @@
 
 namespace beman::net::detail::ex
 {
-    using ::beman::execution::never_stop_token;
-    using ::beman::execution::inplace_stop_source;
-    using ::beman::execution::inplace_stop_token;
-    using ::beman::execution::stop_callback_for_t;
-    using ::beman::execution::detail::stoppable_callback_for;
+using ::beman::execution::inplace_stop_source;
+using ::beman::execution::inplace_stop_token;
+using ::beman::execution::never_stop_token;
+using ::beman::execution::stop_callback_for_t;
+using ::beman::execution::detail::stoppable_callback_for;
 }
 
 // ----------------------------------------------------------------------------

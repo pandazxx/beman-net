@@ -42,7 +42,7 @@ struct beman::net::detail::sender_state_base
         : d_receiver(::std::forward<R>(r))
     {
     }
-    virtual ~sender_state_base() = default;
+    virtual ~sender_state_base()            = default;
     virtual auto start() & noexcept -> void = 0;
 };
 

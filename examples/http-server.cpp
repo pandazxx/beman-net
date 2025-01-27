@@ -87,15 +87,17 @@ auto main() -> int
     net::ip::tcp::acceptor server(context, ep);
     std::cout << "listening on " << ep << "\n";
 
-    scope.spawn(std::invoke([](auto scheduler, auto& scope, auto& server) -> demo::task<> {
-        while (true)
-        {
-            auto[stream, address] = co_await net::async_accept(server);
-            std::cout << "received connection from " << address << "\n";
-            scope.spawn(make_client(scheduler, std::move(stream)));
-
-        }
-    }, context.get_scheduler(), scope, server));
+    scope.spawn(std::invoke(
+        [](auto scheduler, auto& scp, auto& svr) -> demo::task<> {
+            while (true) {
+                auto [stream, address] = co_await net::async_accept(svr);
+                std::cout << "received connection from " << address << "\n";
+                scp.spawn(make_client(scheduler, std::move(stream)));
+            }
+        },
+        context.get_scheduler(),
+        scope,
+        server));
 
     context.run();
 }

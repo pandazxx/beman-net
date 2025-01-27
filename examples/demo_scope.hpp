@@ -59,8 +59,7 @@ namespace demo
             {
                 scope* slf{this->self};
                 delete this->state;
-                if (0u == --slf->count)
-                {
+                if (0u == --slf->count) {
                     slf->complete();
                 }
             }
