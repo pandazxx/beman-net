@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 #include <beman/net/net.hpp>
-#include <beman/execution26/execution.hpp>
+#include <beman/execution/execution.hpp>
 #include "demo_algorithm.hpp"
 #include "demo_scope.hpp"
 #include "demo_task.hpp"
@@ -13,7 +13,7 @@
 #include <string_view>
 #include <unordered_map>
 
-namespace ex  = beman::execution26;
+namespace ex  = beman::execution;
 namespace net = beman::net;
 using namespace std::chrono_literals;
 

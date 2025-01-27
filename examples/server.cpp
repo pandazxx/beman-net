@@ -4,13 +4,13 @@
 #include <iostream>
 #include <functional>
 #include <string_view>
-#include <beman/execution26/execution.hpp>
+#include <beman/execution/execution.hpp>
 #include <beman/net/net.hpp>
 #include "demo_algorithm.hpp"
 #include "demo_scope.hpp"
 #include "demo_task.hpp"
 
-namespace ex  = ::beman::execution26;
+namespace ex  = ::beman::execution;
 namespace net = ::beman::net;
 using namespace std::chrono_literals;
 
