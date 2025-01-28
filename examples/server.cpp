@@ -64,9 +64,9 @@ int main()
         demo::scope            scope;
         net::io_context        context;
 
-        scope.spawn(std::invoke([](auto& scope, auto& context)->demo::task<>{
+        scope.spawn(std::invoke([](auto& scp, auto& ctxt)->demo::task<>{
             net::ip::tcp::endpoint endpoint(net::ip::address_v4::any(), 12345);
-            net::ip::tcp::acceptor acceptor(context, endpoint);
+            net::ip::tcp::acceptor acceptor(ctxt, endpoint);
 
             while (true)
             {
@@ -75,14 +75,14 @@ int main()
                     auto[stream, ep] = co_await demo::when_any(
                             net::async_accept(acceptor),
                             demo::into_error(
-                                net::resume_after(context.get_scheduler(), 1s),
+                                net::resume_after(ctxt.get_scheduler(), 1s),
                                 [](auto&&...){ return ::std::error_code(); }
                             )
                         );
                     ::std::cout << "when_any is done\n";
 
                     std::cout << "ep=" << ep << "\n";
-                    scope.spawn(make_client(std::move(stream)));
+                    scp.spawn(make_client(std::move(stream)));
                 }
                 catch(...)
                 {
