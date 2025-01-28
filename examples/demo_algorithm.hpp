@@ -290,8 +290,8 @@ struct demo::when_any_t::state_value
     ::std::optional<Value> value{};
 
     template <typename R>
-    state_value(::std::size_t total, R&& receiver)
-        : state_base<Receiver>{total, ::std::forward<R>(receiver)}
+    state_value(::std::size_t tot, R&& rcvr)
+        : state_base<Receiver>{tot, ::std::forward<R>(rcvr)}
     {
     }
 
