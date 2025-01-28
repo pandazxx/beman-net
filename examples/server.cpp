@@ -64,32 +64,28 @@ int main()
         demo::scope            scope;
         net::io_context        context;
 
-        scope.spawn(std::invoke([](auto& scp, auto& ctxt)->demo::task<>{
-            net::ip::tcp::endpoint endpoint(net::ip::address_v4::any(), 12345);
-            net::ip::tcp::acceptor acceptor(ctxt, endpoint);
+        scope.spawn(std::invoke(
+            [](auto& scp, auto& ctxt) -> demo::task<> {
+                net::ip::tcp::endpoint endpoint(net::ip::address_v4::any(), 12345);
+                net::ip::tcp::acceptor acceptor(ctxt, endpoint);
 
-            while (true)
-            {
-                try
-                {
-                    auto[stream, ep] = co_await demo::when_any(
-                            net::async_accept(acceptor),
-                            demo::into_error(
-                                net::resume_after(ctxt.get_scheduler(), 1s),
-                                [](auto&&...){ return ::std::error_code(); }
-                            )
-                        );
-                    ::std::cout << "when_any is done\n";
+                while (true) {
+                    try {
+                        auto [stream, ep] =
+                            co_await demo::when_any(net::async_accept(acceptor),
+                                                    demo::into_error(net::resume_after(ctxt.get_scheduler(), 1s),
+                                                                     [](auto&&...) { return ::std::error_code(); }));
+                        ::std::cout << "when_any is done\n";
 
-                    std::cout << "ep=" << ep << "\n";
-                    scp.spawn(make_client(std::move(stream)));
+                        std::cout << "ep=" << ep << "\n";
+                        scp.spawn(make_client(std::move(stream)));
+                    } catch (...) {
+                        std::cout << "timer fired\n";
+                    }
                 }
-                catch(...)
-                {
-                    std::cout << "timer fired\n";
-                }
-            }
-        }, scope, context));
+            },
+            scope,
+            context));
 
         context.run();
     }

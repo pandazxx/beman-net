@@ -290,10 +290,7 @@ struct demo::when_any_t::state_value
     ::std::optional<Value> value{};
 
     template <typename R>
-    state_value(::std::size_t tot, R&& rcvr)
-        : state_base<Receiver>{tot, ::std::forward<R>(rcvr)}
-    {
-    }
+    state_value(::std::size_t tot, R&& rcvr) : state_base<Receiver>{tot, ::std::forward<R>(rcvr)} {}
 
     auto notify_done() -> void override
     {

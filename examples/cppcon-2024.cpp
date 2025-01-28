@@ -95,14 +95,17 @@ auto main() -> int
     net::ip::tcp::endpoint endpoint(net::ip::address_v4::any(), 12345);
     net::ip::tcp::acceptor acceptor(context, endpoint);
 
-    scope.spawn(std::invoke([](auto scheduler, auto& scope, auto& acceptor)->demo::task<> {
-         while (true)
-         {
-            auto[stream, address] = co_await net::async_accept(acceptor);
-            std::cout << "received client: " << address << "\n";
-            scope.spawn(make_client_handler(scheduler, std::move(stream)));
-         }
-    }, context.get_scheduler(), scope, acceptor));
+    scope.spawn(std::invoke(
+        [](auto scheduler, auto& scp, auto& acc) -> demo::task<> {
+            while (true) {
+                auto [stream, address] = co_await net::async_accept(acc);
+                std::cout << "received client: " << address << "\n";
+                scp.spawn(make_client_handler(scheduler, std::move(stream)));
+            }
+        },
+        context.get_scheduler(),
+        scope,
+        acceptor));
 
     context.run();
 }
