@@ -338,8 +338,7 @@ struct beman::net::detail::poll_context final
                     ::std::get<2>(completion) = ::std::size_t(rc);
                     completion.complete();
                     return ::beman::net::detail::submit_result::ready;
-                }
-                else
+                } else
                     switch (errno) {
                     default:
                         completion.error(::std::error_code(errno, ::std::system_category()));
@@ -373,8 +372,7 @@ struct beman::net::detail::poll_context final
                     ::std::get<2>(completion) = ::std::size_t(rc);
                     completion.complete();
                     return ::beman::net::detail::submit_result::ready;
-                }
-                else
+                } else
                     switch (errno) {
                     default:
                         completion.error(::std::error_code(errno, ::std::system_category()));
