@@ -4,12 +4,12 @@
 #include <iostream>
 #include <functional>
 #include <string_view>
-#include <beman/execution26/execution.hpp>
+#include <beman/execution/execution.hpp>
 #include <beman/net/net.hpp>
 #include "demo_scope.hpp"
 #include "demo_task.hpp"
 
-namespace ex  = ::beman::execution26;
+namespace ex  = ::beman::execution;
 namespace net = ::beman::net;
 
 namespace
@@ -22,7 +22,7 @@ int main(int ac, char*[])
 {
     try
     {
-        auto res{ex::sync_wait(::std::invoke([](int ac)-> demo::task<result>
+        auto res{ex::sync_wait(::std::invoke([](int argc)-> demo::task<result>
         {
             int i = co_await ex::just(17);
             std::cout << "i=" << i << "\n";
@@ -36,9 +36,9 @@ int main(int ac, char*[])
             {
                 std::cout << "error=" << e.value << "\n";
             }
-            if (ac == 2)
+            if (argc == 2)
                 co_await ex::just_stopped();
-            if (ac == 3)
+            if (argc == 3)
                 throw error{42};
             co_return result{17};
         }, ac))};

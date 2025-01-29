@@ -42,6 +42,7 @@ struct beman::net::detail::sender_state_base
         : d_receiver(::std::forward<R>(r))
     {
     }
+    virtual ~sender_state_base()            = default;
     virtual auto start() & noexcept -> void = 0;
 };
 
@@ -93,6 +94,7 @@ struct beman::net::detail::sender_state
             , d_state(s)
         {
         }
+        cancel_callback(cancel_callback&&) = default;
         auto operator()()
         {
             if (1 < ++this->d_state->d_outstanding)
@@ -153,7 +155,7 @@ struct beman::net::detail::sender_state
         );
         static_assert(not std::same_as<ex::never_stop_token, void>);
         ++this->d_outstanding;
-        this->d_callback.emplace(token, cancel_callback(this));
+        this->d_callback.emplace(token, this);
         if (token.stop_requested())
         {
             this->d_callback.reset();

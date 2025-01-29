@@ -57,11 +57,10 @@ namespace demo
             }
             auto complete() -> void
             {
-                scope* self{this->self};
+                scope* slf{this->self};
                 delete this->state;
-                if (0u == --self->count)
-                {
-                    self->complete();
+                if (0u == --slf->count) {
+                    slf->complete();
                 }
             }
             auto get_env() const noexcept -> env { return {this->self}; }

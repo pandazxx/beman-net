@@ -111,9 +111,9 @@ struct beman::net::detail::poll_context final
     {
         if (this->d_tasks)
         {
-            auto* task{this->d_tasks};
-            this->d_tasks = task->next;
-            task->complete();
+            auto* tsk{this->d_tasks};
+            this->d_tasks = tsk->next;
+            tsk->complete();
             return 1u;
         }
         return 0u;
@@ -139,7 +139,7 @@ struct beman::net::detail::poll_context final
     }
     auto to_milliseconds(auto duration) -> int
     {
-        return ::std::chrono::duration_cast<::std::chrono::milliseconds>(duration).count();
+        return int(::std::chrono::duration_cast<::std::chrono::milliseconds>(duration).count());
     }
     auto run_one() -> ::std::size_t override final
     {
@@ -158,7 +158,13 @@ struct beman::net::detail::poll_context final
         {
             auto next_time{this->d_timeouts.value_or(now)};
             int timeout{now == next_time? -1: this->to_milliseconds(next_time - now)};
-            int rc(::poll(this->d_poll.data(), this->d_poll.size(), timeout));
+            nfds_t sz([](auto s) {
+                if constexpr (::std::same_as<decltype(s), nfds_t>)
+                    return s;
+                else
+                    return nfds_t(s);
+            }(this->d_poll.size()));
+            int    rc(::poll(this->d_poll.data(), sz, timeout));
             if (rc < 0)
             {
                 switch (errno)
@@ -215,7 +221,7 @@ struct beman::net::detail::poll_context final
         auto it(::std::find(this->d_outstanding.begin(), this->d_outstanding.end(), op));
         if (it != this->d_outstanding.end())
         {
-            this->remove_outstanding(::std::distance(this->d_outstanding.begin(), it));
+            this->remove_outstanding(std::size_t(::std::distance(this->d_outstanding.begin(), it)));
             op->cancel();
             cancel_op->cancel();
         }
@@ -229,10 +235,9 @@ struct beman::net::detail::poll_context final
             std::cerr << "ERROR: poll_context::cancel(): entity not cancelled!\n";
         }
     }
-    auto schedule(::beman::net::detail::context_base::task* task) -> void override
-    {
-        task->next = this->d_tasks;
-        this->d_tasks = task;
+    auto schedule(::beman::net::detail::context_base::task* tsk) -> void override {
+        tsk->next     = this->d_tasks;
+        this->d_tasks = tsk;
     }
     auto accept(::beman::net::detail::context_base::accept_operation* completion)
         -> ::beman::net::detail::submit_result override final
@@ -242,15 +247,15 @@ struct beman::net::detail::poll_context final
                ::beman::net::detail::io_base* comp)
             {
                 auto id{comp->id};
-                auto& completion(*static_cast<accept_operation*>(comp));
+                auto& cmp(*static_cast<accept_operation*>(comp));
 
                 while (true)
                 {
-                    int rc = ::accept(ctxt.native_handle(id), ::std::get<0>(completion).data(), &::std::get<1>(completion));
+                    int rc = ::accept(ctxt.native_handle(id), ::std::get<0>(cmp).data(), &::std::get<1>(cmp));
                     if (0 <= rc)
                     {
-                        ::std::get<2>(completion) =  ctxt.make_socket(rc);
-                        completion.complete();
+                        ::std::get<2>(cmp) = ctxt.make_socket(rc);
+                        cmp.complete();
                         return ::beman::net::detail::submit_result::ready;
                     }
                     else
@@ -258,7 +263,7 @@ struct beman::net::detail::poll_context final
                         switch (errno)
                         {
                         default:
-                            completion.error(::std::error_code(errno, ::std::system_category()));
+                            cmp.error(::std::error_code(errno, ::std::system_category()));
                             return ::beman::net::detail::submit_result::error;
                         case EINTR:
                             break;
@@ -296,26 +301,23 @@ struct beman::net::detail::poll_context final
         }
 
         op->context = this;
-        op->work = [](::beman::net::detail::context_base& ctxt,
-                      ::beman::net::detail::io_base* op)
-        {
-            auto handle{ctxt.native_handle(op->id)};
+        op->work    = [](::beman::net::detail::context_base& ctxt, ::beman::net::detail::io_base* o) {
+            auto hndl{ctxt.native_handle(o->id)};
 
             int error{};
             ::socklen_t len{sizeof(error)};
-            if (-1 == ::getsockopt(handle, SOL_SOCKET, SO_ERROR, &error, &len))
-            {
-                op->error(::std::error_code(errno, ::std::system_category()));
+            if (-1 == ::getsockopt(hndl, SOL_SOCKET, SO_ERROR, &error, &len)) {
+                o->error(::std::error_code(errno, ::std::system_category()));
                 return ::beman::net::detail::submit_result::error;
             }
             if (0 == error)
             {
-                op->complete();
+                o->complete();
                 return ::beman::net::detail::submit_result::ready;
             }
             else
             {
-                op->error(::std::error_code(error, ::std::system_category()));
+                o->error(::std::error_code(error, ::std::system_category()));
                 return ::beman::net::detail::submit_result::error;
             }
         };
@@ -326,36 +328,31 @@ struct beman::net::detail::poll_context final
         -> ::beman::net::detail::submit_result override
     {
         op->context = this;
-        op->work = [](::beman::net::detail::context_base& ctxt,
-                      ::beman::net::detail::io_base* op)
-        {
-            auto& completion(*static_cast<receive_operation*>(op));
+        op->work    = [](::beman::net::detail::context_base& ctxt, ::beman::net::detail::io_base* o) {
+            auto& completion(*static_cast<receive_operation*>(o));
             while (true)
             {
-                auto rc{::recvmsg(ctxt.native_handle(op->id),
-                                  &::std::get<0>(completion),
-                                  ::std::get<1>(completion))};
+                auto rc{::recvmsg(ctxt.native_handle(o->id), &::std::get<0>(completion), ::std::get<1>(completion))};
                 if (0 <= rc)
                 {
-                    ::std::get<2>(completion) = rc;
+                    ::std::get<2>(completion) = ::std::size_t(rc);
                     completion.complete();
                     return ::beman::net::detail::submit_result::ready;
-                }
-                else switch (errno)
-                {
-                default:
-                    completion.error(::std::error_code(errno, ::std::system_category()));
-                    return ::beman::net::detail::submit_result::error;
-                case ECONNRESET:
-                case EPIPE:
-                    ::std::get<2>(completion) = 0u;
-                    completion.complete();
-                    return ::beman::net::detail::submit_result::ready;
-                case EINTR:
-                    break;
-                case EWOULDBLOCK:
-                    return ::beman::net::detail::submit_result::submit;
-                }
+                } else
+                    switch (errno) {
+                    default:
+                        completion.error(::std::error_code(errno, ::std::system_category()));
+                        return ::beman::net::detail::submit_result::error;
+                    case ECONNRESET:
+                    case EPIPE:
+                        ::std::get<2>(completion) = 0u;
+                        completion.complete();
+                        return ::beman::net::detail::submit_result::ready;
+                    case EINTR:
+                        break;
+                    case EWOULDBLOCK:
+                        return ::beman::net::detail::submit_result::submit;
+                    }
             }
         };
         return this->add_outstanding(op);
@@ -364,37 +361,32 @@ struct beman::net::detail::poll_context final
         -> ::beman::net::detail::submit_result override
     {
         op->context = this;
-        op->work = [](::beman::net::detail::context_base& ctxt,
-                      ::beman::net::detail::io_base* op)
-        {
-            auto& completion(*static_cast<send_operation*>(op));
+        op->work    = [](::beman::net::detail::context_base& ctxt, ::beman::net::detail::io_base* o) {
+            auto& completion(*static_cast<send_operation*>(o));
 
             while (true)
             {
-                auto rc{::sendmsg(ctxt.native_handle(op->id),
-                                    &::std::get<0>(completion),
-                                    ::std::get<1>(completion))};
+                auto rc{::sendmsg(ctxt.native_handle(o->id), &::std::get<0>(completion), ::std::get<1>(completion))};
                 if (0 <= rc)
                 {
-                    ::std::get<2>(completion) = rc;
+                    ::std::get<2>(completion) = ::std::size_t(rc);
                     completion.complete();
                     return ::beman::net::detail::submit_result::ready;
-                }
-                else switch (errno)
-                {
-                default:
-                    completion.error(::std::error_code(errno, ::std::system_category()));
-                    return ::beman::net::detail::submit_result::error;
-                case ECONNRESET:
-                case EPIPE:
-                    ::std::get<2>(completion) = 0u;
-                    completion.complete();
-                    return ::beman::net::detail::submit_result::ready;
-                case EINTR:
-                    break;
-                case EWOULDBLOCK:
-                    return ::beman::net::detail::submit_result::submit;
-                }
+                } else
+                    switch (errno) {
+                    default:
+                        completion.error(::std::error_code(errno, ::std::system_category()));
+                        return ::beman::net::detail::submit_result::error;
+                    case ECONNRESET:
+                    case EPIPE:
+                        ::std::get<2>(completion) = 0u;
+                        completion.complete();
+                        return ::beman::net::detail::submit_result::ready;
+                    case EINTR:
+                        break;
+                    case EWOULDBLOCK:
+                        return ::beman::net::detail::submit_result::submit;
+                    }
             }
         };
         return this->add_outstanding(op);

@@ -11,8 +11,8 @@
 
 namespace beman::net::detail
 {
-    template <typename T, typename = ::std::less<>, typename = decltype([](T* n){ return n->value; })>
-    struct sorted_list;
+template <typename T, typename = ::std::less<>, typename = decltype([](T* node) { return node->value; })>
+struct sorted_list;
 }
 
 // ----------------------------------------------------------------------------

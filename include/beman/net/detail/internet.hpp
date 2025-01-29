@@ -231,15 +231,13 @@ public:
         this->d_address.storage.ss_family = PF_INET;
     }
     constexpr address(address const&) noexcept = default;
-    /*-dk:TODO constexpr*/ address(::beman::net::ip::address_v4 const& address) noexcept
-    {
+    /*-dk:TODO constexpr*/ address(const ::beman::net::ip::address_v4& addr) noexcept {
         this->d_address.inet.sin_family = AF_INET;
-        this->d_address.inet.sin_addr.s_addr = htonl(address.to_uint());
+        this->d_address.inet.sin_addr.s_addr = htonl(addr.to_uint());
         this->d_address.inet.sin_port = 0xFF'FF;
     }
-    /*-dk:TODO constexpr*/ address(::beman::net::ip::address_v6 const& address) noexcept
-    {
-        address.get_address(this->d_address.inet6, 0xFF'FF);
+    /*-dk:TODO constexpr*/ address(const ::beman::net::ip::address_v6& addr) noexcept {
+        addr.get_address(this->d_address.inet6, 0xFF'FF);
     }
 
     auto operator=(address const&) noexcept -> address& = default;

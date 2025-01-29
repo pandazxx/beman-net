@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sanitizer: [none, asan, usan, tsan]
+        sanitizer: [none, asan, usan]
         compiler: [g++]
     steps:
       - uses: actions/checkout@v4

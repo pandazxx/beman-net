@@ -131,7 +131,13 @@ struct beman::net::detail::send_desc
         auto submit(auto* base) -> ::beman::net::detail::submit_result
         {
             ::std::get<0>(*base).msg_iov    = this->d_buffers.data();
-            ::std::get<0>(*base).msg_iovlen = this->d_buffers.size();
+            ::std::get<0>(*base).msg_iovlen = [](auto x) {
+                using iovlen = decltype(msghdr().msg_iovlen);
+                if constexpr (std::same_as<decltype(x), iovlen>)
+                    return x;
+                else
+                    return iovlen(x);
+            }(this->d_buffers.size());
             return this->d_stream.get_scheduler().send(base);
         }
     };
@@ -188,7 +194,13 @@ struct beman::net::detail::receive_desc
         auto submit(auto* base) -> ::beman::net::detail::submit_result
         {
             ::std::get<0>(*base).msg_iov    = this->d_buffers.data();
-            ::std::get<0>(*base).msg_iovlen = this->d_buffers.size();
+            ::std::get<0>(*base).msg_iovlen = [](auto x) {
+                using iovlen = decltype(msghdr().msg_iovlen);
+                if constexpr (std::same_as<decltype(x), iovlen>)
+                    return x;
+                else
+                    return iovlen(x);
+            }(this->d_buffers.size());
             return this->d_stream.get_scheduler().receive(base);
         }
     };

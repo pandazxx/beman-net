@@ -55,7 +55,8 @@ struct beman::net::detail::io_base
     work_t                                work;
     extra_t                               extra{nullptr, +[](void*){}};
 
-    io_base(::beman::net::detail::socket_id id, int event): id(id), event(event) {}
+    io_base(::beman::net::detail::socket_id i, int ev) : id(i), event(ev) {}
+    virtual ~io_base() = default;
 
     virtual auto complete() -> void = 0;
     virtual auto error(::std::error_code) -> void = 0;
@@ -72,11 +73,8 @@ struct beman::net::detail::io_operation
     , Data
 {
     template <typename D = Data>
-    io_operation(::beman::net::detail::socket_id id, int event, D&& a = Data())
-        : io_base(id, event)
-        , Data(::std::forward<D>(a))
-    {
-    }
+    io_operation(::beman::net::detail::socket_id i, int ev, D&& a = Data())
+        : io_base(i, ev), Data(::std::forward<D>(a)) {}
 };
 
 

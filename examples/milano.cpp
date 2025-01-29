@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 #include <beman/net/net.hpp>
-#include <beman/execution26/execution.hpp>
+#include <beman/execution/execution.hpp>
 #include "demo_algorithm.hpp"
 #include "demo_error.hpp"
 #include "demo_scope.hpp"
@@ -14,7 +14,7 @@
 #include <string_view>
 #include <unordered_map>
 
-namespace ex  = beman::execution26;
+namespace ex  = beman::execution;
 namespace net = beman::net;
 using namespace std::chrono_literals;
 
@@ -81,13 +81,13 @@ auto main() -> int
     demo::scope scope;
     net::io_context context;
 
-    scope.spawn([](auto& context, auto& scope)->demo::task<> {
+    scope.spawn([](auto& ctxt, auto& scp) -> demo::task<> {
         net::ip::tcp::endpoint ep(net::ip::address_v4::any(), 12345);
-        net::ip::tcp::acceptor acceptor(context, ep);
+        net::ip::tcp::acceptor acceptor(ctxt, ep);
         while (true) {
-           auto[client, address] = co_await net::async_accept(acceptor);
-           std::cout << "received a connection from " << address << "\n";
-           scope.spawn(run_client(std::move(client), context.get_scheduler()));
+            auto [client, address] = co_await net::async_accept(acceptor);
+            std::cout << "received a connection from " << address << "\n";
+            scp.spawn(run_client(std::move(client), ctxt.get_scheduler()));
         }
     }(context, scope));
 
