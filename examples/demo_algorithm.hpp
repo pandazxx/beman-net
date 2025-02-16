@@ -94,6 +94,7 @@ namespace demo::detail
 
     template <typename> struct make_type_list;
     template <template <typename> class L, typename... T>
+        requires(! ::std::same_as<L<ex::set_stopped_t()>, ex::completion_signatures<ex::set_stopped_t()>>)
     struct make_type_list<L<T...>>
     {
         using type = ex::detail::type_list<T...>;

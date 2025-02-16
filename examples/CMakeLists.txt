@@ -4,13 +4,13 @@
 # cmake-format: on
 
 set(EXAMPLES
-  http-server
-  empty
-  server
   client
-  task
   cppcon-2024
+  empty
+  http-server
   milano
+  server
+  task
 )
 
 foreach(EXAMPLE ${EXAMPLES})
