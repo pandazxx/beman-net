@@ -10,6 +10,7 @@
 #include <beman/net/detail/container.hpp>
 #include <beman/net/detail/context_base.hpp>
 #include <beman/net/detail/sorted_list.hpp>
+#include <sys/poll.h>
 #include <vector>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -65,6 +66,19 @@ struct beman::net::detail::poll_context final : ::beman::net::detail::context_ba
     }
     auto native_handle(::beman::net::detail::socket_id id) -> ::beman::net::detail::native_handle_type override final {
         return this->d_sockets[id].handle;
+    }
+
+    constexpr auto native_event_filter(::beman::net::detail::event_filter filter) -> short {
+        switch (filter) {
+        case ::beman::net::detail::event_filter::read:
+            return POLLIN;
+        case ::beman::net::detail::event_filter::write:
+            return POLLOUT;
+        case ::beman::net::detail::event_filter::readwrite:
+            return POLLIN | POLLOUT;
+        case ::beman::net::detail::event_filter::noop:
+            return 0;
+        }
     }
     auto set_option(::beman::net::detail::socket_id id,
                     int                             level,
@@ -166,7 +180,8 @@ struct beman::net::detail::poll_context final : ::beman::net::detail::context_ba
         auto id{completion->id};
         if (this->d_sockets[id].blocking ||
             completion->work(*this, completion) == ::beman::net::detail::submit_result::submit) {
-            this->d_poll.emplace_back(::pollfd{this->native_handle(id), short(completion->event), short()});
+            this->d_poll.emplace_back(
+                ::pollfd{this->native_handle(id), native_event_filter(completion->event), short()});
             this->d_outstanding.emplace_back(completion);
             this->wakeup();
             return ::beman::net::detail::submit_result::submit;

@@ -13,6 +13,7 @@
 
 namespace beman::net::detail {
 enum class submit_result { ready, submit, error };
+enum class event_filter { read, write, readwrite, noop };
 auto operator<<(::std::ostream&, ::beman::net::detail::submit_result) -> ::std::ostream&;
 
 struct io_base;
@@ -47,11 +48,11 @@ struct beman::net::detail::io_base {
     io_base*                            next{nullptr}; // used for an intrusive list
     ::beman::net::detail::context_base* context{nullptr};
     ::beman::net::detail::socket_id     id;    // the entity affected
-    int                                 event; // mask for expected events
+    ::beman::net::detail::event_filter  event; // mask for expected events
     work_t                              work;
     extra_t                             extra{nullptr, +[](void*) {}};
 
-    io_base(::beman::net::detail::socket_id i, int ev) : id(i), event(ev) {}
+    io_base(::beman::net::detail::socket_id i, ::beman::net::detail::event_filter ev) : id(i), event(ev) {}
     virtual ~io_base() = default;
 
     virtual auto complete() -> void               = 0;
@@ -65,7 +66,7 @@ struct beman::net::detail::io_base {
 template <typename Data>
 struct beman::net::detail::io_operation : io_base, Data {
     template <typename D = Data>
-    io_operation(::beman::net::detail::socket_id i, int ev, D&& a = Data())
+    io_operation(::beman::net::detail::socket_id i, ::beman::net::detail::event_filter ev, D&& a = Data())
         : io_base(i, ev), Data(::std::forward<D>(a)) {}
 };
 

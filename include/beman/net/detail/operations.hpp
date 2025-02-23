@@ -53,7 +53,7 @@ struct beman::net::detail::accept_desc {
         data(acceptor_t& a) : d_acceptor(a) {}
 
         auto id() const { return this->d_acceptor.id(); }
-        auto events() const { return POLLIN; }
+        auto events() const { return ::beman::net::detail::event_filter::read; }
         auto get_scheduler() { return this->d_acceptor.get_scheduler(); }
         auto set_value(operation& o, auto&& receiver) {
             ::beman::net::detail::ex::set_value(
@@ -77,7 +77,7 @@ struct beman::net::detail::connect_desc {
         Socket& d_socket;
 
         auto id() const { return this->d_socket.id(); }
-        auto events() const { return POLLIN | POLLOUT; }
+        auto events() const { return ::beman::net::detail::event_filter::readwrite; }
         auto get_scheduler() { return this->d_socket.get_scheduler(); }
         auto set_value(operation&, auto&& receiver) { ::beman::net::detail::ex::set_value(::std::move(receiver)); }
         auto submit(auto* base) -> ::beman::net::detail::submit_result {
@@ -97,7 +97,7 @@ struct beman::net::detail::send_desc {
         Buffers   d_buffers;
 
         auto id() const { return this->d_stream.id(); }
-        auto events() const { return POLLOUT; }
+        auto events() const { return ::beman::net::detail::event_filter::write; }
         auto get_scheduler() { return this->d_stream.get_scheduler(); }
         auto set_value(operation& o, auto&& receiver) {
             ::beman::net::detail::ex::set_value(::std::move(receiver), ::std::move(::std::get<2>(o)));
@@ -127,7 +127,7 @@ struct beman::net::detail::send_to_desc {
         Endpoint  d_endpoint;
 
         auto id() const { return this->d_stream.id(); }
-        auto events() const { return POLLOUT; }
+        auto events() const { return ::beman::net::detail::event_filter::write; }
         auto get_scheduler() { return this->d_stream.get_scheduler(); }
         auto set_value(operation& o, auto&& receiver) {
             ::beman::net::detail::ex::set_value(::std::move(receiver), ::std::get<2>(o));
@@ -152,7 +152,7 @@ struct beman::net::detail::receive_desc {
         Buffers   d_buffers;
 
         auto id() const { return this->d_stream.id(); }
-        auto events() const { return POLLIN; }
+        auto events() const { return ::beman::net::detail::event_filter::read; }
         auto get_scheduler() { return this->d_stream.get_scheduler(); }
         auto set_value(operation& o, auto&& receiver) {
             ::beman::net::detail::ex::set_value(::std::move(receiver), ::std::get<2>(o));
@@ -182,7 +182,7 @@ struct beman::net::detail::receive_from_desc {
         Endpoint  d_endpoint;
 
         auto id() const { return this->d_stream.id(); }
-        auto events() const { return POLLIN; }
+        auto events() const { return ::beman::net::detail::event_filter::read; }
         auto get_scheduler() { return this->d_stream.get_scheduler(); }
         auto set_value(operation& o, auto&& receiver) {
             ::beman::net::detail::ex::set_value(::std::move(receiver), ::std::get<2>(o));

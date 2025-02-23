@@ -6,6 +6,8 @@
 
 // ----------------------------------------------------------------------------
 
+#include "beman/net/detail/context_base.hpp"
+#include "beman/net/detail/io_base.hpp"
 #include <beman/net/detail/netfwd.hpp>
 #include <beman/net/detail/sender.hpp>
 
@@ -36,7 +38,7 @@ struct beman::net::detail::resume_after_desc {
         ::std::chrono::microseconds      d_duration;
 
         auto id() const -> ::beman::net::detail::socket_id { return {}; }
-        auto events() const { return decltype(POLLIN)(); }
+        auto events() const { return ::beman::net::detail::event_filter::noop; }
         auto get_scheduler() { return this->d_scheduler; }
         auto set_value(operation&, auto&& receiver) { ::beman::net::detail::ex::set_value(::std::move(receiver)); }
         auto submit(auto* base) -> ::beman::net::detail::submit_result {
@@ -58,7 +60,7 @@ struct beman::net::detail::resume_at_desc {
         ::std::chrono::system_clock::time_point d_time;
 
         auto id() const -> ::beman::net::detail::socket_id { return {}; }
-        auto events() const { return decltype(POLLIN)(); }
+        auto events() const { return ::beman::net::detail::event_filter::noop; }
         auto get_scheduler() { return this->d_scheduler; }
         auto set_value(operation&, auto&& receiver) { ::beman::net::detail::ex::set_value(::std::move(receiver)); }
         auto submit(auto* base) -> bool {

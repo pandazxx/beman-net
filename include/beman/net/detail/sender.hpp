@@ -66,7 +66,9 @@ struct beman::net::detail::sender_state : Desc::operation, ::beman::net::detail:
     struct cancel_callback : ::beman::net::detail::io_base {
         sender_state* d_state;
         cancel_callback(sender_state* s)
-            : ::beman::net::detail::io_base(::beman::net::detail::socket_id(), 0), d_state(s) {}
+            : ::beman::net::detail::io_base(::beman::net::detail::socket_id(),
+                                            ::beman::net::detail::event_filter::noop),
+              d_state(s) {}
         cancel_callback(cancel_callback&&) = default;
         auto operator()() {
             if (1 < ++this->d_state->d_outstanding) {
