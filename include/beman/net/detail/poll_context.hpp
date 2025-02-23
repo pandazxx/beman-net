@@ -208,7 +208,14 @@ struct beman::net::detail::poll_context final
         if (this->d_sockets[id].blocking
             || completion->work(*this, completion) == ::beman::net::detail::submit_result::submit)
         {
-            this->d_poll.emplace_back(::pollfd{this->native_handle(id), short(completion->event), short()});
+            decltype(pollfd().events) events{};
+            if (bool(completion->event & ::beman::net::event_type::in)) {
+                events |= POLLIN;
+            }
+            if (bool(completion->event & ::beman::net::event_type::out)) {
+                events |= POLLOUT;
+            }
+            this->d_poll.emplace_back(::pollfd{this->native_handle(id), events, short()});
             this->d_outstanding.emplace_back(completion);
             this->wakeup();
             return ::beman::net::detail::submit_result::submit;

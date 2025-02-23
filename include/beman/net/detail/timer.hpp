@@ -8,6 +8,7 @@
 
 #include <beman/net/detail/netfwd.hpp>
 #include <beman/net/detail/sender.hpp>
+#include <beman/net/detail/event_type.hpp>
 
 // ----------------------------------------------------------------------------
 
@@ -40,7 +41,7 @@ struct beman::net::detail::resume_after_desc
         ::std::chrono::microseconds             d_duration;
 
         auto id() const -> ::beman::net::detail::socket_id { return {}; }
-        auto events() const { return decltype(POLLIN)(); }
+        auto events() const { return ::beman::net::event_type::none; }
         auto get_scheduler() { return this->d_scheduler; }
         auto set_value(operation&, auto&& receiver)
         {
@@ -68,7 +69,7 @@ struct beman::net::detail::resume_at_desc
         ::std::chrono::system_clock::time_point d_time;
 
         auto id() const -> ::beman::net::detail::socket_id { return {}; }
-        auto events() const { return decltype(POLLIN)(); }
+        auto events() const { return ::beman::net::event_type::none; }
         auto get_scheduler() { return this->d_scheduler; }
         auto set_value(operation&, auto&& receiver)
         {
