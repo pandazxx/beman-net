@@ -5,6 +5,7 @@
 #define INCLUDED_BEMAN_NET_DETAIL_IO_BASE
 
 #include <beman/net/detail/netfwd.hpp>
+#include <beman/net/detail/event_type.hpp>
 #include <memory>
 #include <system_error>
 #include <ostream>
@@ -51,11 +52,11 @@ struct beman::net::detail::io_base
     io_base*                              next{nullptr}; // used for an intrusive list
     ::beman::net::detail::context_base* context{nullptr};
     ::beman::net::detail::socket_id     id;            // the entity affected
-    int                                   event;         // mask for expected events
+    ::beman::net::event_type              event;         // mask for expected events
     work_t                                work;
     extra_t                               extra{nullptr, +[](void*){}};
 
-    io_base(::beman::net::detail::socket_id i, int ev) : id(i), event(ev) {}
+    io_base(::beman::net::detail::socket_id i, ::beman::net::event_type ev) : id(i), event(ev) {}
     virtual ~io_base() = default;
 
     virtual auto complete() -> void = 0;
@@ -73,7 +74,7 @@ struct beman::net::detail::io_operation
     , Data
 {
     template <typename D = Data>
-    io_operation(::beman::net::detail::socket_id i, int ev, D&& a = Data())
+    io_operation(::beman::net::detail::socket_id i, ::beman::net::event_type ev, D&& a = Data())
         : io_base(i, ev), Data(::std::forward<D>(a)) {}
 };
 

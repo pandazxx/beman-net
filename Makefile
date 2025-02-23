@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 
 SANITIZERS = none debug msan asan usan tsan
-.PHONY: default gcc clang run update check ce todo distclean clean build test all $(SANITIZERS)
+.PHONY: default gcc clang run update check ce todo distclean clean build test all format $(SANITIZERS)
 
 COMPILER=system
 CXX_BASE=$(CXX:$(dir $(CXX))%=%)
@@ -87,6 +87,9 @@ check:
 
 todo:
 	bin/mk-todo.py
+
+format:
+	git clang-format main
 
 clean:
 	$(RM) -r $(BUILD)

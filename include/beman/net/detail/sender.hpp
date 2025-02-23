@@ -90,10 +90,8 @@ struct beman::net::detail::sender_state
     {
         sender_state* d_state;
         cancel_callback(sender_state* s)
-            : ::beman::net::detail::io_base(::beman::net::detail::socket_id(), 0)
-            , d_state(s)
-        {
-        }
+            : ::beman::net::detail::io_base(::beman::net::detail::socket_id(), ::beman::net::event_type::none),
+              d_state(s) {}
         cancel_callback(cancel_callback&&) = default;
         auto operator()()
         {
@@ -248,11 +246,9 @@ struct beman::net::detail::sender_cpo
     template <::beman::net::detail::ex::sender Upstream, typename... Args>
     auto operator()(Upstream&& u, Args&&... args) const
     {
-        using data = Desc::template data<::std::decay_t<Args>...>;
-        return ::beman::net::detail::sender<Desc, data, ::std::remove_cvref_t<Upstream>>{
-            data{::std::forward<Args>(args)...},
-            ::std::forward<Upstream>(u)
-        };
+        using Data = Desc::template data<::std::decay_t<Args>...>;
+        return ::beman::net::detail::sender<Desc, Data, ::std::remove_cvref_t<Upstream>>{
+            Data{::std::forward<Args>(args)...}, ::std::forward<Upstream>(u)};
     }
 };
 
